@@ -4,12 +4,35 @@ window.addEventListener("load", function () {
 
   // Mobile 9:16 portrait optimization
   function resize() {
-    const height = window.innerHeight;
-    const width = Math.min(window.innerWidth, height * (9 / 16));
+    const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    const targetRatio = 9 / 16;
+    
+    let width, height;
+    if (vw / vh > targetRatio) {
+      height = vh;
+      width = vh * targetRatio;
+    } else {
+      width = vw;
+      height = vw / targetRatio;
+    }
+    
     canvas.width = 720; // Internal resolution
     canvas.height = 1280;
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
+    
+    // Ensure overlays match the canvas size
+    const overlayWidth = width + "px";
+    const overlayHeight = height + "px";
+    startGameEl.querySelector('div').style.width = "100%";
+    startGameEl.querySelector('div').style.height = "100%";
+    startGameEl.style.width = overlayWidth;
+    startGameEl.style.height = overlayHeight;
+    restartGameEl.querySelector('div').style.width = "100%";
+    restartGameEl.querySelector('div').style.height = "100%";
+    restartGameEl.style.width = overlayWidth;
+    restartGameEl.style.height = overlayHeight;
   }
   window.addEventListener("resize", resize);
   resize();
