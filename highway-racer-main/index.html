@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="A 2D car chase game where you control a car to avoid obstacles, collect power-ups, and survive as long as possible." />
+        <title>Highway Racer</title>
+        <link rel="stylesheet" href="./styles.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="m-0 bg-black flex justify-center items-center h-screen overflow-hidden">
+        <div class="fixed inset-0 flex items-center justify-center z-50 p-4" id="startGameEl">
+            <div class="w-full max-w-[360px] aspect-[9/16] bg-[#1D1C2E] bg-opacity-90 rounded-[20px] border-4 border-[#DD4444] shadow-2xl flex flex-col items-center justify-center p-6 text-center">
+                <h1 class="text-4xl text-[#EFEFEF] font-bold mb-8">HIGHWAY RACER</h1>
+                <p class="text-[#EFEFEF] mb-12 text-sm">TAP TO JUMP & MOVE<br>AVOID CARS, COLLECT FUEL!</p>
+                <button id="startGameBtn" class="w-full py-4 bg-[#EFEFEF] text-[#1D1C2E] rounded-xl font-bold text-xl active:scale-95 transition-transform">START GAME</button>
+            </div>
+        </div>
+        <div class="fixed inset-0 flex items-center justify-center z-50 p-4 hidden" id="restartGameEl">
+            <div class="w-full max-w-[360px] aspect-[9/16] bg-[#1D1C2E] bg-opacity-90 rounded-[20px] border-4 border-[#DD4444] shadow-2xl flex flex-col items-center justify-center p-6 text-center">
+                <h2 class="text-3xl text-[#EFEFEF] font-bold mb-4">GAME OVER</h2>
+                <div class="space-y-2 mb-12">
+                    <p class="text-xl text-[#EFEFEF]">Score: <span id="scoreEl">0</span></p>
+                    <p class="text-xl text-[#EFEFEF]">Distance: <span id="metersEl">0</span>m</p>
+                </div>
+                <button id="restartGameBtn" class="w-full py-4 bg-[#EFEFEF] text-[#1D1C2E] rounded-xl font-bold text-xl active:scale-95 transition-transform">PLAY AGAIN</button>
+            </div>
+        </div>
+        <canvas id="canvas" class="bg-[#44AD44]"></canvas>
+        <img src="./Public/Bezel/bezel.png" id="bezel" class="hidden" />
+        <img src="./Public/Player/player.png" id="player" class="hidden" />
+        <img src="./Public/Enemies/Car.png" id="car" class="hidden" />
+        <img src="./Public/Enemies/Taxi.png" id="taxi" class="hidden" />
+        <img src="./Public/Enemies/Audi.png" id="audi" class="hidden" />
+        <img src="./Public/Other/GasCan.png" id="gasCan" class="hidden" />
+        <img src="./Public/Enemies/Truck.png" id="truck" class="hidden" />
+        <img src="./Public/Other/Health.png" id="health" class="hidden" />
+        <img src="./Public/Enemies/Police.png" id="police" class="hidden" />
+        <img src="./Public/Enemies/MiniVan.png" id="miniVan" class="hidden" />
+        <img src="./Public/Other/Explosion.png" id="explosion" class="hidden" />
+        <img src="./Public/Enemies/Ambulance.png" id="ambulance" class="hidden" />
+        <img src="./Public/Enemies/MiniTruck.png" id="miniTruck" class="hidden" />
+        <img src="./Public/Background/background.png" id="background" class="hidden" />
+        <script src="./script.js"></script>
+    </body>
+</html>
