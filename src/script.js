@@ -146,11 +146,12 @@ window.addEventListener("load", function () {
         
         const handleStart = (e) => {
           e.preventDefault();
-          if (!this.codes.includes(code)) this.codes.push(code);
+          // We use the button ID as a virtual key code
+          if (!this.codes.includes(id)) this.codes.push(id);
         };
         const handleEnd = (e) => {
           e.preventDefault();
-          const index = this.codes.indexOf(code);
+          const index = this.codes.indexOf(id);
           if (index > -1) this.codes.splice(index, 1);
         };
 
@@ -214,11 +215,25 @@ window.addEventListener("load", function () {
       this.image = document.getElementById("player");
     }
     update() {
+      this.handleInput();
       this.applyPhysics();
       this.handleBoundaries();
       this.updateHitbox();
       this.fuel -= this.fuelDecrement;
       this.draw();
+    }
+    handleInput() {
+      // Keyboard Movement
+      if (input.codes.includes('KeyW') || input.codes.includes('ArrowUp')) this.pos.y -= 5;
+      if (input.codes.includes('KeyS') || input.codes.includes('ArrowDown')) this.pos.y += 5;
+      if (input.codes.includes('KeyA') || input.codes.includes('ArrowLeft')) this.pos.x -= 7;
+      if (input.codes.includes('KeyD') || input.codes.includes('ArrowRight')) this.pos.x += 7;
+      
+      // On-screen D-pad logic (held buttons)
+      if (input.codes.includes('btnUp')) this.pos.y -= 5;
+      if (input.codes.includes('btnDown')) this.pos.y += 5;
+      if (input.codes.includes('btnLeft')) this.pos.x -= 7;
+      if (input.codes.includes('btnRight')) this.pos.x += 7;
     }
     applyPhysics() {
       // Gravity and Jumping
