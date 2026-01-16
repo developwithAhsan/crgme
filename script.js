@@ -19,7 +19,7 @@ window.addEventListener("load", function () {
 
   const backgroundMusic = new Audio();
   // Handle audio error gracefully
-  backgroundMusic.src = "./Public/Audio/backgrounMusic.mp3";
+  backgroundMusic.src = "./public/Audio/backgrounMusic.mp3";
   backgroundMusic.loop = true;
   backgroundMusic.volume = 0.75;
 
@@ -286,29 +286,38 @@ window.addEventListener("load", function () {
   let enemyTimer = 0;
 
   function animate(timestamp) {
-    const deltaTime = timestamp - lastTime;
+    const deltaTime = timestamp - lastTime || 0;
+    if (lastTime === 0) {
+      lastTime = timestamp;
+      if (!gameOver) requestAnimationFrame(animate);
+      return;
+    }
     lastTime = timestamp;
 
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     background.update();
 
     // Spawn enemies
-    enemyTimer += deltaTime;
+    enemyTimer += deltaTime || 0;
     if (enemyTimer > 1000) {
       const id = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
-      enemies.push(new Enemy(document.getElementById(id)));
+      const img = document.getElementById(id);
+      if (img) {
+        enemies.push(new Enemy(img));
+      }
       enemyTimer = 0;
     }
 
     enemies = enemies.filter(e => e.y < CANVAS_HEIGHT + 200);
-    enemies.forEach((enemy, i) => {
+    for (let i = enemies.length - 1; i >= 0; i--) {
+      const enemy = enemies[i];
       enemy.update();
       if (checkCollision(player, enemy)) {
         player.health -= 20;
         explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
         enemies.splice(i, 1);
       }
-    });
+    }
 
     explosions = explosions.filter(e => e.frame < e.maxFrame);
     explosions.forEach(e => e.update());

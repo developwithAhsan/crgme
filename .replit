@@ -1,4 +1,4 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-20", "python-3.11"]
 [nix]
 channel = "stable-25_05"
 packages = ["unzip"]
@@ -22,13 +22,13 @@ args = "Run Game"
 name = "Run Game"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npx serve -l 5000 highway-racer-main"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 -m http.server 5000"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
