@@ -72,6 +72,7 @@ window.addEventListener("load", function () {
   let drops = [];
   let explosions = [];
   let enemies = [];
+  let boosterActive = 0; // Timer for booster effect
   const enemyTypes = [
     "car",
     "taxi",
@@ -342,6 +343,60 @@ window.addEventListener("load", function () {
     }
   }
 
+  class FuelDrop {
+    constructor() {
+      this.width = 60;
+      this.height = 60;
+      this.x = Math.random() * (CANVAS_WIDTH - 100) + 50;
+      this.y = -100;
+      this.speed = gameSpeed;
+      this.image = document.getElementById("gasCan");
+      this.hitbox = { x: 0, y: 0, width: 40, height: 40 };
+      this.amount = Math.random() > 0.5 ? 30 : 10;
+    }
+    update() {
+      this.y += this.speed;
+      this.hitbox.x = this.x + 10;
+      this.hitbox.y = this.y + 10;
+      this.draw();
+    }
+    draw() {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      // Optional: draw text for amount
+      ctx.fillStyle = "white";
+      ctx.font = "bold 14px Arial";
+      ctx.fillText(`+${this.amount}%`, this.x + 5, this.y - 5);
+    }
+  }
+
+  class BoosterDrop {
+    constructor() {
+      this.width = 70;
+      this.height = 70;
+      this.x = Math.random() * (CANVAS_WIDTH - 100) + 50;
+      this.y = -100;
+      this.speed = gameSpeed;
+      this.image = document.getElementById("health"); // Reusing health sprite for booster or placeholder
+      this.hitbox = { x: 0, y: 0, width: 50, height: 50 };
+    }
+    update() {
+      this.y += this.speed;
+      this.hitbox.x = this.x + 10;
+      this.hitbox.y = this.y + 10;
+      this.draw();
+    }
+    draw() {
+      ctx.save();
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = "cyan";
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      ctx.fillStyle = "cyan";
+      ctx.font = "bold 14px Arial";
+      ctx.fillText("BOOST", this.x + 5, this.y - 5);
+      ctx.restore();
+    }
+  }
+
   function checkCollision(a, b) {
     if (player.z > 20) return false; // Can jump over things
     return a.hitbox.x < b.hitbox.x + b.hitbox.width &&
@@ -362,6 +417,7 @@ window.addEventListener("load", function () {
     player.pos.y = CANVAS_HEIGHT * 0.8;
     gameOver = false;
     gameSpeed = 5;
+    boosterActive = 0;
     document.getElementById('gameControls').style.display = 'block';
     animate(0);
   }
@@ -389,6 +445,16 @@ window.addEventListener("load", function () {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     background.update();
 
+    if (boosterActive > 0) {
+      boosterActive--;
+      gameSpeed = 15;
+      // Visual feedback for boosting
+      ctx.fillStyle = "rgba(0, 255, 255, 0.1)";
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    } else {
+      gameSpeed = 5;
+    }
+
     // Spawn enemies
     enemyTimer += deltaTime || 0;
     if (enemyTimer > 1000) {
@@ -400,14 +466,39 @@ window.addEventListener("load", function () {
       enemyTimer = 0;
     }
 
+    // Spawn Drops
+    if (Math.random() < 0.005) drops.push(new FuelDrop());
+    if (Math.random() < 0.002) drops.push(new BoosterDrop());
+
     enemies = enemies.filter(e => e.y < CANVAS_HEIGHT + 200);
     for (let i = enemies.length - 1; i >= 0; i--) {
       const enemy = enemies[i];
       enemy.update();
       if (checkCollision(player, enemy)) {
-        player.health -= 20;
-        explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
-        enemies.splice(i, 1);
+        if (boosterActive > 0) {
+          // Smash enemies while boosting!
+          explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
+          enemies.splice(i, 1);
+          score += 50;
+        } else {
+          player.health -= 20;
+          explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
+          enemies.splice(i, 1);
+        }
+      }
+    }
+
+    drops = drops.filter(d => d.y < CANVAS_HEIGHT + 100);
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const drop = drops[i];
+      drop.update();
+      if (checkCollision(player, drop)) {
+        if (drop instanceof FuelDrop) {
+          player.fuel = Math.min(100, player.fuel + drop.amount);
+        } else if (drop instanceof BoosterDrop) {
+          boosterActive = 300; // ~5 seconds at 60fps
+        }
+        drops.splice(i, 1);
       }
     }
 
