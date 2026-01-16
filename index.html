@@ -27,6 +27,17 @@
             </div>
         </div>
         <canvas id="canvas" class="bg-[#44AD44] shadow-2xl"></canvas>
+        <div id="gameControls" class="fixed inset-0 pointer-events-none hidden select-none">
+            <!-- D-Pad -->
+            <div class="absolute bottom-10 left-10 w-40 h-40 grid grid-cols-3 grid-rows-3 gap-2 pointer-events-auto opacity-50 active:opacity-80">
+                <div id="btnUp" class="col-start-2 bg-gray-600 rounded-lg flex items-center justify-center text-white text-2xl">▲</div>
+                <div id="btnLeft" class="row-start-2 bg-gray-600 rounded-lg flex items-center justify-center text-white text-2xl">◀</div>
+                <div id="btnDown" class="row-start-3 col-start-2 bg-gray-600 rounded-lg flex items-center justify-center text-white text-2xl">▼</div>
+                <div id="btnRight" class="row-start-2 col-start-3 bg-gray-600 rounded-lg flex items-center justify-center text-white text-2xl">▶</div>
+            </div>
+            <!-- Jump Button -->
+            <div id="btnJump" class="absolute bottom-10 right-10 w-24 h-24 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl pointer-events-auto opacity-60 active:opacity-90 shadow-lg">JUMP</div>
+        </div>
         <img src="./public/Bezel/bezel.png" id="bezel" class="hidden" />
         <img src="./public/Player/player.png" id="player" class="hidden" />
         <img src="./public/Enemies/Car.png" id="car" class="hidden" />

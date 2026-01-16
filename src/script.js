@@ -22,9 +22,15 @@ window.addEventListener("load", function () {
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
     
-    // Ensure overlays match the canvas size
+    // Ensure overlays and controls match the canvas size
     const overlayWidth = width + "px";
     const overlayHeight = height + "px";
+    const controls = document.getElementById('gameControls');
+    controls.style.width = overlayWidth;
+    controls.style.height = overlayHeight;
+    controls.style.left = canvas.offsetLeft + "px";
+    controls.style.top = canvas.offsetTop + "px";
+
     startGameEl.querySelector('div').style.width = "100%";
     startGameEl.querySelector('div').style.height = "100%";
     startGameEl.style.width = overlayWidth;
@@ -117,6 +123,45 @@ window.addEventListener("load", function () {
         restartGameEl.style.display = "none";
         init();
       });
+
+      // On-screen controls
+      const buttons = {
+        'btnUp': 'KeyW',
+        'btnDown': 'KeyS',
+        'btnLeft': 'KeyA',
+        'btnRight': 'KeyD'
+      };
+
+      Object.entries(buttons).forEach(([id, code]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        
+        const handleStart = (e) => {
+          e.preventDefault();
+          if (!this.codes.includes(code)) this.codes.push(code);
+        };
+        const handleEnd = (e) => {
+          e.preventDefault();
+          const index = this.codes.indexOf(code);
+          if (index > -1) this.codes.splice(index, 1);
+        };
+
+        btn.addEventListener('touchstart', handleStart);
+        btn.addEventListener('touchend', handleEnd);
+        btn.addEventListener('mousedown', handleStart);
+        btn.addEventListener('mouseup', handleEnd);
+        btn.addEventListener('mouseleave', handleEnd);
+      });
+
+      const jumpBtn = document.getElementById('btnJump');
+      if (jumpBtn) {
+        const handleJump = (e) => {
+          e.preventDefault();
+          if (player.jumpTimer === 0) player.jump();
+        };
+        jumpBtn.addEventListener('touchstart', handleJump);
+        jumpBtn.addEventListener('mousedown', handleJump);
+      }
     }
   }
 
@@ -294,6 +339,7 @@ window.addEventListener("load", function () {
     player.pos.y = CANVAS_HEIGHT * 0.8;
     gameOver = false;
     gameSpeed = 5;
+    document.getElementById('gameControls').style.display = 'block';
     animate(0);
   }
 
@@ -362,6 +408,7 @@ window.addEventListener("load", function () {
       scoreEl.innerText = score;
       metersEl.innerText = metersTraveled;
       restartGameEl.style.display = "flex";
+      document.getElementById('gameControls').style.display = 'none';
       return;
     }
 
