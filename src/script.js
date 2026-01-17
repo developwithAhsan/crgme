@@ -12,10 +12,12 @@ window.addEventListener("load", function () {
   const highScoreEl = document.getElementById("highScoreEl");
   const bestMetersEl = document.getElementById("bestMetersEl");
 
-  // Mobile 9:16 portrait optimization
+  // Mobile and Tablet optimization
   function resize() {
     const vh = window.innerHeight;
     const vw = window.innerWidth;
+    
+    // For tablets, we can use a slightly wider ratio or just more flexible scaling
     const targetRatio = 9 / 16;
     
     let width, height;
@@ -27,12 +29,19 @@ window.addEventListener("load", function () {
       height = vw / targetRatio;
     }
     
-    canvas.width = 720; // Internal resolution
+    // Internal resolution stays consistent for gameplay
+    canvas.width = 720; 
     canvas.height = 1280;
+    
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
     
-    // Ensure overlays and controls match the canvas size
+    // Centering the canvas on tablet/desktop screens
+    canvas.style.position = 'absolute';
+    canvas.style.left = (vw - width) / 2 + 'px';
+    canvas.style.top = (vh - height) / 2 + 'px';
+    
+    // Ensure overlays and controls match the canvas size and position
     const overlayWidth = width + "px";
     const overlayHeight = height + "px";
     const controls = document.getElementById('gameControls');
@@ -44,22 +53,16 @@ window.addEventListener("load", function () {
     }
 
     if (startGameEl) {
-      const startDiv = startGameEl.querySelector('div');
-      if (startDiv) {
-        startDiv.style.width = "100%";
-        startDiv.style.height = "100%";
-      }
       startGameEl.style.width = overlayWidth;
       startGameEl.style.height = overlayHeight;
+      startGameEl.style.left = canvas.offsetLeft + "px";
+      startGameEl.style.top = canvas.offsetTop + "px";
     }
     if (restartGameEl) {
-      const restartDiv = restartGameEl.querySelector('div');
-      if (restartDiv) {
-        restartDiv.style.width = "100%";
-        restartDiv.style.height = "100%";
-      }
       restartGameEl.style.width = overlayWidth;
       restartGameEl.style.height = overlayHeight;
+      restartGameEl.style.left = canvas.offsetLeft + "px";
+      restartGameEl.style.top = canvas.offsetTop + "px";
     }
   }
   window.addEventListener("resize", resize);
