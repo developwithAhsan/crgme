@@ -20,15 +20,48 @@
                     <p class="text-blue-300 mt-2 text-sm font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">High-Speed Survival</p>
                 </div>
                 
-                <!-- Side Selection Buttons -->
-                <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-8 w-full pointer-events-none">
-                    <button id="btnOpenGarage" class="py-6 px-8 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-[0_10px_20px_rgba(16,185,129,0.5)] active:scale-95 transition-all border-b-4 border-emerald-700 animate-pulse-slow pointer-events-auto">GARAGE</button>
-                    <button id="btnOpenTracks" class="py-6 px-8 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-[0_10px_20px_rgba(59,130,246,0.5)] active:scale-95 transition-all border-b-4 border-blue-700 pointer-events-auto">TRACKS</button>
+                <!-- Bottom Control Bar -->
+                <div class="mb-12 w-full max-w-[600px] flex items-center justify-between gap-4 px-4 relative z-20">
+                    <button id="btnOpenGarage" class="flex-1 py-4 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(16,185,129,0.4)] active:scale-95 transition-all border-b-4 border-emerald-700 animate-pulse-slow">GARAGE</button>
+                    
+                    <button id="startGameBtn" class="flex-[2] py-8 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-4xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.6)] active:scale-95 transition-all border-b-8 border-red-800 hover:brightness-110">START</button>
+                    
+                    <button id="btnOpenTracks" class="flex-1 py-4 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(59,130,246,0.4)] active:scale-95 transition-all border-b-4 border-blue-700">TRACKS</button>
                 </div>
 
-                <!-- Start Button at the bottom -->
-                <div class="mb-12 w-full flex justify-center">
-                    <button id="startGameBtn" class="w-full max-w-[400px] py-8 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-4xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.6)] active:scale-95 active:shadow-none transition-all border-b-8 border-red-800 hover:brightness-110">START RACE</button>
+                <!-- Settings Button (Top Right) -->
+                <button id="btnOpenSettings" class="absolute top-8 right-8 w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all active:scale-90 shadow-lg group">
+                    <svg class="w-8 h-8 group-hover:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="modalSettings" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+            <div class="w-full max-w-[400px] bg-[#1a1a2e] rounded-[32px] border-4 border-white/10 p-8 relative transform scale-90 transition-transform duration-300">
+                <button class="close-modal absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-3xl text-white font-black mb-8 italic uppercase tracking-tighter">SET<span class="text-blue-500">TINGS</span></h2>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <span class="text-white font-bold tracking-wider">MUSIC</span>
+                        <button id="toggleMusic" class="w-16 h-8 bg-emerald-500 rounded-full relative transition-all shadow-inner">
+                            <div class="absolute top-1 right-1 w-6 h-6 bg-white rounded-full shadow-md transition-all"></div>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <span class="text-white font-bold tracking-wider">SOUND FX</span>
+                        <button id="toggleSFX" class="w-16 h-8 bg-emerald-500 rounded-full relative transition-all shadow-inner">
+                            <div class="absolute top-1 right-1 w-6 h-6 bg-white rounded-full shadow-md transition-all"></div>
+                        </button>
+                    </div>
+
+                    <div class="pt-4 opacity-30 text-center">
+                        <p class="text-[10px] text-white font-bold uppercase tracking-[0.2em]">Ultra Racer v1.2</p>
+                    </div>
                 </div>
             </div>
         </div>

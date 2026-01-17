@@ -621,8 +621,13 @@ window.addEventListener("load", function () {
   // --- Modal Logic ---
   const modalGarage = document.getElementById('modalGarage');
   const modalTracks = document.getElementById('modalTracks');
+  const modalSettings = document.getElementById('modalSettings');
   const btnOpenGarage = document.getElementById('btnOpenGarage');
   const btnOpenTracks = document.getElementById('btnOpenTracks');
+  const btnOpenSettings = document.getElementById('btnOpenSettings');
+
+  let musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
+  let sfxEnabled = localStorage.getItem('sfxEnabled') !== 'false';
 
   function openModal(modal) {
     modal.classList.remove('hidden');
@@ -630,7 +635,7 @@ window.addEventListener("load", function () {
   }
 
   function closeModal() {
-    const modals = [modalGarage, modalTracks];
+    const modals = [modalGarage, modalTracks, modalSettings];
     modals.forEach(m => {
       m.classList.remove('modal-open');
       setTimeout(() => m.classList.add('hidden'), 300);
@@ -645,12 +650,80 @@ window.addEventListener("load", function () {
     playSound('select');
     openModal(modalTracks);
   });
+  btnOpenSettings.addEventListener('click', () => {
+    playSound('select');
+    openModal(modalSettings);
+  });
   document.querySelectorAll('.close-modal').forEach(btn => {
     btn.addEventListener('click', closeModal);
   });
 
-  const carSelectionContainer = document.getElementById('carSelection');
-  const roadSelectionContainer = document.getElementById('roadSelection');
+  // Settings Logic
+  const toggleMusic = document.getElementById('toggleMusic');
+  const toggleSFX = document.getElementById('toggleSFX');
+
+  function updateSettingsUI() {
+    if (toggleMusic) {
+      const dot = toggleMusic.querySelector('div');
+      toggleMusic.className = `w-16 h-8 rounded-full relative transition-all shadow-inner ${musicEnabled ? 'bg-emerald-500' : 'bg-red-500/50'}`;
+      dot.style.right = musicEnabled ? '4px' : '36px';
+    }
+    if (toggleSFX) {
+      const dot = toggleSFX.querySelector('div');
+      toggleSFX.className = `w-16 h-8 rounded-full relative transition-all shadow-inner ${sfxEnabled ? 'bg-emerald-500' : 'bg-red-500/50'}`;
+      dot.style.right = sfxEnabled ? '4px' : '36px';
+    }
+  }
+
+  toggleMusic.addEventListener('click', () => {
+    musicEnabled = !musicEnabled;
+    localStorage.setItem('musicEnabled', musicEnabled);
+    if (!musicEnabled) {
+      sounds.driving.pause();
+    } else if (gameRunning) {
+      sounds.driving.play().catch(() => {});
+    }
+    updateSettingsUI();
+    playSound('select');
+  });
+
+  toggleSFX.addEventListener('click', () => {
+    sfxEnabled = !sfxEnabled;
+    localStorage.setItem('sfxEnabled', sfxEnabled);
+    updateSettingsUI();
+    playSound('select');
+  });
+
+  updateSettingsUI();
+
+  function playSound(name) {
+    if (sfxEnabled && sounds[name]) {
+      sounds[name].currentTime = 0;
+      sounds[name].play().catch(() => {});
+    }
+  }
+
+  let gameRunning = false;
+  function init() {
+    score = 0;
+    metersTraveled = 0;
+    enemies = [];
+    drops = [];
+    explosions = [];
+    player.health = 100;
+    player.fuel = 100;
+    player.pos.x = CANVAS_WIDTH/2 - player.width/2;
+    player.pos.y = CANVAS_HEIGHT * 0.8;
+    gameOver = false;
+    gameRunning = true;
+    gameSpeed = playerBaseSpeed / 30; // Scale base speed
+    boosterActive = 0;
+    enemyTimer = 0; // Reset enemy spawn timer
+    itemTimer = 0; // Reset item spawn timer
+    document.getElementById('gameControls').style.display = 'block';
+    if (musicEnabled) sounds.driving.play().catch(() => {});
+    animate(0);
+  }
 
   const carsData = [
     { id: 'car1', speed: 250, unlock: 0, img: 'public/Cars/car1.png' },
@@ -869,6 +942,7 @@ window.addEventListener("load", function () {
 
     if (player.health <= 0 || player.fuel <= 0) {
       gameOver = true;
+      gameRunning = false;
       sounds.driving.pause();
       sounds.driving.currentTime = 0;
       playSound('gameover');
