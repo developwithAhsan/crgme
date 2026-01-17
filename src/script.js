@@ -249,9 +249,12 @@ window.addEventListener("load", function () {
       }
     }
     jump() {
-      if (this.z === 0 && this.jumpCooldown === 0) {
+      if (this.z === 0 && this.jumpCooldown <= 0) {
         this.vz = 15;
         this.jumpCooldown = this.maxJumpCooldown;
+        console.log("Jump activated, cooldown set to:", this.jumpCooldown);
+      } else {
+        console.log("Jump blocked. z:", this.z, "cooldown:", this.jumpCooldown);
       }
     }
     updateHitbox() {
@@ -546,7 +549,10 @@ window.addEventListener("load", function () {
     ctx.textAlign = "left";
     ctx.fillText(`SPEED: ${Math.round(gameSpeed * 10)} KM/H`, 20, 80);
     
-    const jumpReady = player.jumpCooldown === 0;
+    // Debug info on screen
+    // ctx.fillText(`Z: ${Math.round(player.z)} CD: ${player.jumpCooldown}`, 20, 130);
+    
+    const jumpReady = player.jumpCooldown <= 0;
     ctx.fillStyle = jumpReady ? "#44ff44" : "#ff4444";
     const cooldownSec = Math.ceil(player.jumpCooldown / 60);
     ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${cooldownSec}S`, 20, 105);
