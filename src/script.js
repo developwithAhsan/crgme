@@ -796,12 +796,14 @@ window.addEventListener("load", function () {
     });
   }
 
+  // Initial render
+  renderSelectionUI();
+
   // --- Three.js (Removed) ---
+  /*
   const script = document.createElement('script');
-  script.onload = () => {
-    renderSelectionUI();
-  };
-  document.head.appendChild(script);
+  ...
+  */
 
   // --- Lobby Tab Logic (Removed in favor of Modals) ---
   /*
