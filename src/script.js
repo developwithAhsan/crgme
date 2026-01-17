@@ -242,8 +242,8 @@ window.addEventListener("load", function () {
       this.fuelDecrement = 0.05;
       this.maxHealth = 100;
       this.health = this.maxHealth;
-      this.width = 101;
-      this.height = 177;
+      this.width = 111;
+      this.height = 195;
       this.pos = {
         x: CANVAS_WIDTH * 0.5 - this.width * 0.5,
         y: CANVAS_HEIGHT * 0.8,
@@ -257,7 +257,7 @@ window.addEventListener("load", function () {
       this.rotation = 0; // Target rotation in radians
       this.currentRotation = 0; // Current rotation for smooth transition
       
-      this.hitbox = { x: 0, y: 0, width: 76, height: 152 };
+      this.hitbox = { x: 0, y: 0, width: 84, height: 167 };
       this.image = document.getElementById("player");
     }
     update() {
@@ -378,13 +378,13 @@ window.addEventListener("load", function () {
 
   class Enemy {
     constructor(image) {
-      this.width = 101;
-      this.height = 177;
+      this.width = 111;
+      this.height = 195;
       this.x = Math.random() * (CANVAS_WIDTH - 150) + 50;
       this.y = -200;
       this.speed = Math.random() * 3 + 4;
       this.image = image;
-      this.hitbox = { x: 0, y: 0, width: 76, height: 152 };
+      this.hitbox = { x: 0, y: 0, width: 84, height: 167 };
     }
     update() {
       this.y += this.speed + gameSpeed/2;
