@@ -741,30 +741,51 @@ window.addEventListener("load", function () {
   ];
 
   function renderSelectionUI() {
+    if (!carSelectionContainer || !roadSelectionContainer) return;
+
     carSelectionContainer.innerHTML = carsData.map(car => {
       const unlocked = highScore >= car.unlock;
       return `
-        <button class="car-btn group relative aspect-square bg-[#0f3460]/40 rounded-2xl border-2 ${selectedCar === car.id ? 'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'border-white/5'} ${!unlocked ? 'opacity-50 grayscale' : ''}" 
+        <button class="car-btn group relative aspect-square bg-[#0f3460]/40 rounded-2xl border-2 ${selectedCar === car.id ? 'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'border-white/5'} transition-all active:scale-95" 
                 data-car="${car.id}" data-speed="${car.speed}" data-unlocked="${unlocked}">
-          <img src="${car.img}" class="w-full h-full object-contain p-2">
-          ${!unlocked ? `<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-2xl">
-            <span class="text-[10px] text-white font-bold uppercase">Unlock at</span>
-            <span class="text-xs text-emerald-400 font-black">${car.unlock}</span>
+          <img src="${car.img}" class="w-full h-full object-contain p-2 ${!unlocked ? 'grayscale opacity-50' : ''}">
+          ${!unlocked ? `
+          <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-2xl">
+            <svg class="w-8 h-8 text-white/50 mb-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+            <span class="text-[10px] text-white/70 font-bold uppercase tracking-widest">SCORE</span>
+            <span class="text-sm text-emerald-400 font-black">${car.unlock}</span>
+          </div>` : ''}
+          ${selectedCar === car.id ? `
+          <div class="absolute top-2 right-2 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
           </div>` : ''}
         </button>
       `;
     }).join('');
 
     roadSelectionContainer.innerHTML = roadsData.map(road => {
+      const roadId = road.id === 'default' ? 'background' : 'road_' + road.id;
       const unlocked = bestDistance >= road.dist;
       return `
-        <button class="road-btn group relative h-32 overflow-hidden bg-[#0f3460]/40 rounded-2xl border-2 ${selectedRoad === (road.id === 'default' ? 'background' : 'road_'+road.id) ? 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'border-white/5'} ${!unlocked ? 'opacity-50 grayscale' : ''}" 
+        <button class="road-btn group relative h-32 overflow-hidden bg-[#0f3460]/40 rounded-2xl border-2 ${selectedRoad === roadId ? 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'border-white/5'} transition-all active:scale-95" 
                 data-road="${road.id}" data-distance="${road.dist}" data-unlocked="${unlocked}">
-          <img src="${road.img}" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform">
-          <div class="relative z-10 flex flex-col items-center justify-center h-full">
-            <span class="font-black italic tracking-tighter text-lg text-white">${road.name}</span>
-            ${!unlocked ? `<span class="text-[10px] font-bold text-blue-300">REQ: ${road.dist}M</span>` : ''}
+          <img src="${road.img}" class="absolute inset-0 w-full h-full object-cover ${!unlocked ? 'grayscale opacity-30' : 'opacity-100 group-hover:scale-110'} transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          
+          <div class="relative z-10 flex flex-col items-center justify-center h-full p-4">
+            <span class="font-black italic tracking-tighter text-2xl text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase">${road.name}</span>
+            ${!unlocked ? `
+            <div class="mt-2 flex flex-col items-center">
+              <svg class="w-6 h-6 text-white/50 mb-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+              <span class="text-[10px] font-black text-blue-300 tracking-[0.2em] uppercase">UNLOCK: ${road.dist}M</span>
+            </div>` : `
+            <span class="text-[10px] font-black text-emerald-400 tracking-[0.2em] uppercase mt-2">SELECTED</span>`}
           </div>
+          
+          ${selectedRoad === roadId ? `
+          <div class="absolute top-4 right-4 w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center shadow-lg animate-bounce z-20">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+          </div>` : ''}
         </button>
       `;
     }).join('');
