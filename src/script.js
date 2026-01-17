@@ -392,8 +392,8 @@ window.addEventListener("load", function () {
     update() {
       this.y += this.speed + gameSpeed/2;
       // Very tight hitbox for enemy: 70% of width, 85% of height, centered
-      this.hitbox.width = this.width * 0.7;
-      this.hitbox.height = this.height * 0.85;
+      this.hitbox.width = this.width * 0.1;
+      this.hitbox.height = this.height * 0.1;
       this.hitbox.x = this.x + (this.width - this.hitbox.width) / 2;
       this.hitbox.y = this.y + (this.height - this.hitbox.height) / 2;
       this.draw();
@@ -456,7 +456,7 @@ window.addEventListener("load", function () {
       this.y = -100;
       this.speed = gameSpeed;
       this.image = document.getElementById("health"); // Reusing health sprite for booster or placeholder
-      this.hitbox = { x: 0, y: 0, width: 50, height: 50 };
+      this.hitbox = { x: 0, y: 0, width: 20, height: 50 };
     }
     update() {
       this.y += this.speed;
@@ -522,6 +522,8 @@ window.addEventListener("load", function () {
     gameOver = false;
     gameSpeed = playerBaseSpeed / 30; // Scale base speed
     boosterActive = 0;
+    enemyTimer = 0; // Reset enemy spawn timer
+    itemTimer = 0; // Reset item spawn timer
     document.getElementById('gameControls').style.display = 'block';
     animate(0);
   }
@@ -718,7 +720,16 @@ window.addEventListener("load", function () {
       const id = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
       const img = document.getElementById(id);
       if (img) {
-        enemies.push(new Enemy(img));
+        const newEnemy = new Enemy(img);
+        // Prevent overlapping with existing enemies
+        let overlapping = false;
+        for (let e of enemies) {
+          if (Math.abs(newEnemy.x - e.x) < 120 && Math.abs(newEnemy.y - e.y) < 250) {
+            overlapping = true;
+            break;
+          }
+        }
+        if (!overlapping) enemies.push(newEnemy);
       }
       enemyTimer = 0;
     }
