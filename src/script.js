@@ -618,6 +618,111 @@ window.addEventListener("load", function () {
   const healthBar = new StatusBar(20, 40, "HEALTH", "#ff4444");
   const fuelBar = new StatusBar(CANVAS_WIDTH - 170, 40, "FUEL", "#ffcc00");
 
+  // --- Modal Logic ---
+  const modalGarage = document.getElementById('modalGarage');
+  const modalTracks = document.getElementById('modalTracks');
+  const btnOpenGarage = document.getElementById('btnOpenGarage');
+  const btnOpenTracks = document.getElementById('btnOpenTracks');
+
+  function openModal(modal) {
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('modal-open'), 10);
+  }
+
+  function closeModal() {
+    const modals = [modalGarage, modalTracks];
+    modals.forEach(m => {
+      m.classList.remove('modal-open');
+      setTimeout(() => m.classList.add('hidden'), 300);
+    });
+  }
+
+  btnOpenGarage.addEventListener('click', () => {
+    playSound('select');
+    openModal(modalGarage);
+  });
+  btnOpenTracks.addEventListener('click', () => {
+    playSound('select');
+    openModal(modalTracks);
+  });
+  document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', closeModal);
+  });
+
+  const carSelectionContainer = document.getElementById('carSelection');
+  const roadSelectionContainer = document.getElementById('roadSelection');
+
+  const carsData = [
+    { id: 'car1', speed: 250, unlock: 0, img: 'public/Cars/car1.png' },
+    { id: 'car2', speed: 300, unlock: 10000, img: 'public/Cars/car2.png' },
+    { id: 'car3', speed: 320, unlock: 15000, img: 'public/Cars/car3.png' },
+    { id: 'car4', speed: 350, unlock: 50000, img: 'public/Cars/car4.png' },
+    { id: 'car5', speed: 380, unlock: 100000, img: 'public/Cars/car5.png' }
+  ];
+
+  const roadsData = [
+    { id: 'default', name: 'HIGHWAY', dist: 0, img: 'public/Background/background.png' },
+    { id: 'autumn', name: 'AUTUMN', dist: 7000, img: 'public/Roads/autumn.png' },
+    { id: 'winter', name: 'WINTER', dist: 15000, img: 'public/Roads/winter.png' },
+    { id: 'desert', name: 'DESERT', dist: 30000, img: 'public/Roads/desert.png' }
+  ];
+
+  function renderSelectionUI() {
+    carSelectionContainer.innerHTML = carsData.map(car => {
+      const unlocked = highScore >= car.unlock;
+      return `
+        <button class="car-btn group relative aspect-square bg-[#0f3460]/40 rounded-2xl border-2 ${selectedCar === car.id ? 'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'border-white/5'} ${!unlocked ? 'opacity-50 grayscale' : ''}" 
+                data-car="${car.id}" data-speed="${car.speed}" data-unlocked="${unlocked}">
+          <img src="${car.img}" class="w-full h-full object-contain p-2">
+          ${!unlocked ? `<div class="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-2xl">
+            <span class="text-[10px] text-white font-bold uppercase">Unlock at</span>
+            <span class="text-xs text-emerald-400 font-black">${car.unlock}</span>
+          </div>` : ''}
+        </button>
+      `;
+    }).join('');
+
+    roadSelectionContainer.innerHTML = roadsData.map(road => {
+      const unlocked = bestDistance >= road.dist;
+      return `
+        <button class="road-btn group relative h-32 overflow-hidden bg-[#0f3460]/40 rounded-2xl border-2 ${selectedRoad === (road.id === 'default' ? 'background' : 'road_'+road.id) ? 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'border-white/5'} ${!unlocked ? 'opacity-50 grayscale' : ''}" 
+                data-road="${road.id}" data-distance="${road.dist}" data-unlocked="${unlocked}">
+          <img src="${road.img}" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform">
+          <div class="relative z-10 flex flex-col items-center justify-center h-full">
+            <span class="font-black italic tracking-tighter text-lg text-white">${road.name}</span>
+            ${!unlocked ? `<span class="text-[10px] font-bold text-blue-300">REQ: ${road.dist}M</span>` : ''}
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    // Re-attach listeners
+    document.querySelectorAll('.car-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.unlocked === "true") {
+          playSound('select');
+          selectedCar = btn.dataset.car;
+          playerBaseSpeed = parseInt(btn.dataset.speed);
+          player.image.src = `public/Cars/${selectedCar}.png`;
+          closeModal();
+          renderSelectionUI();
+        }
+      });
+    });
+
+    document.querySelectorAll('.road-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.unlocked === "true") {
+          playSound('select');
+          selectedRoad = btn.dataset.road === 'default' ? 'background' : 'road_' + btn.dataset.road;
+          background.updateImage();
+          closeModal();
+          renderSelectionUI();
+        }
+      });
+    });
+  }
+
   // --- Three.js 3D Car Preview ---
   let scene, camera, renderer, carModel;
   function initThreeJs() {
@@ -636,7 +741,7 @@ window.addEventListener("load", function () {
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
 
-    camera.position.set(0, 2, 5);
+    camera.position.set(0, 1.5, 4);
     camera.lookAt(0, 0, 0);
 
     const loader = new THREE.GLTFLoader();
@@ -645,15 +750,11 @@ window.addEventListener("load", function () {
       scene.add(carModel);
       carModel.scale.set(1.5, 1.5, 1.5);
       carModel.rotation.y = Math.PI / 4;
-    }, undefined, (error) => {
-      console.error('Error loading 3D model:', error);
     });
 
     function animateThree() {
       requestAnimationFrame(animateThree);
-      if (carModel) {
-        carModel.rotation.y += 0.01;
-      }
+      if (carModel) carModel.rotation.y += 0.01;
       renderer.render(scene, camera);
     }
     animateThree();
@@ -664,28 +765,15 @@ window.addEventListener("load", function () {
   script.src = 'https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js';
   script.onload = () => {
     initThreeJs();
+    renderSelectionUI();
   };
   document.head.appendChild(script);
 
-  // --- Lobby Tab Logic ---
+  // --- Lobby Tab Logic (Removed in favor of Modals) ---
+  /*
   const tabTrack = document.getElementById('tabTrack');
-  const tabCar = document.getElementById('tabCar');
-  const panelTrack = document.getElementById('panelTrack');
-  const panelCar = document.getElementById('panelCar');
-
-  function showPanel(panel) {
-    panelTrack.classList.add('hidden');
-    panelCar.classList.add('hidden');
-    tabTrack.classList.remove('border-emerald-500/50');
-    tabCar.classList.remove('border-emerald-500/50');
-
-    panel.classList.remove('hidden');
-    if (panel === panelTrack) tabTrack.classList.add('border-emerald-500/50');
-    if (panel === panelCar) tabCar.classList.add('border-emerald-500/50');
-  }
-
-  tabTrack.addEventListener('click', () => showPanel(panelTrack));
-  tabCar.addEventListener('click', () => showPanel(panelCar));
+  ...
+  */
 
   let lastTime = 0;
   let gameSpeed = 8; // Increased from 5
@@ -833,7 +921,7 @@ window.addEventListener("load", function () {
         highScore = score;
         localStorage.setItem('highwayRacerHighScore', highScore);
       }
-      updateRoadButtons();
+      renderSelectionUI();
       scoreEl.innerText = score;
       metersEl.innerText = finalDistance;
       highScoreEl.innerText = highScore;

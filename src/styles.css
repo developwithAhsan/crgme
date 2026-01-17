@@ -19,3 +19,21 @@
 .shake {
   animation: shake 0.5s infinite;
 }
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.9; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
+
+.modal-open {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
+.modal-open > div {
+  transform: scale(1) !important;
+}

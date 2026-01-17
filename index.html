@@ -26,76 +26,41 @@
                     <div id="threeJsCanvas" class="w-full h-full"></div>
                 </div>
 
-                <!-- Tab Navigation -->
-                <div class="flex gap-2 mb-6 w-full max-w-[400px]">
-                    <button id="tabTrack" class="flex-1 py-3 bg-[#0f3460] text-white rounded-xl font-bold text-xs uppercase tracking-widest border-2 border-transparent transition-all hover:bg-blue-600/20 active:scale-95">Tracks</button>
-                    <button id="tabCar" class="flex-1 py-3 bg-[#0f3460] text-white rounded-xl font-bold text-xs uppercase tracking-widest border-2 border-emerald-500/50 transition-all hover:bg-emerald-600/20 active:scale-95">Garage</button>
+                <!-- Selection Buttons -->
+                <div class="flex gap-4 mb-8 w-full max-w-[400px]">
+                    <button id="btnOpenGarage" class="flex-1 py-4 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(16,185,129,0.3)] active:scale-95 transition-all border-b-4 border-emerald-700 animate-pulse-slow">GARAGE</button>
+                    <button id="btnOpenTracks" class="flex-1 py-4 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(59,130,246,0.3)] active:scale-95 transition-all border-b-4 border-blue-700">TRACKS</button>
                 </div>
 
-                <!-- Panels Container -->
-                <div class="w-full relative min-h-[160px] mb-8">
-                    <!-- Garage Panel (Default) -->
-                    <div id="panelCar" class="w-full bg-[#0f3460] bg-opacity-40 p-5 rounded-2xl border border-blue-500/20 shadow-inner">
-                        <p class="text-white text-[10px] font-black uppercase tracking-widest mb-4 opacity-50">Select Your Machine</p>
-                        <div id="carSelection" class="grid grid-cols-5 gap-2">
-                            <button class="car-btn group relative aspect-square bg-[#1a1a2e] rounded-xl border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] pointer-events-auto transition-all overflow-hidden" data-car="car1" data-speed="250" data-unlock="0" data-unlocked="true">
-                                <img src="public/Cars/car1.png" class="w-full h-full object-contain p-1">
-                                <div class="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            </button>
-                            <button class="car-btn group relative aspect-square bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all overflow-hidden" data-car="car2" data-speed="300" data-unlock="10000" data-unlocked="false">
-                                <img src="public/Cars/car2.png" class="w-full h-full object-contain p-1 grayscale">
-                                <div class="absolute inset-0 flex items-center justify-center bg-black/40"><span class="text-[8px] text-white font-bold">10k</span></div>
-                            </button>
-                            <button class="car-btn group relative aspect-square bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all overflow-hidden" data-car="car3" data-speed="320" data-unlock="15000" data-unlocked="false">
-                                <img src="public/Cars/car3.png" class="w-full h-full object-contain p-1 grayscale">
-                                <div class="absolute inset-0 flex items-center justify-center bg-black/40"><span class="text-[8px] text-white font-bold">15k</span></div>
-                            </button>
-                            <button class="car-btn group relative aspect-square bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all overflow-hidden" data-car="car4" data-speed="350" data-unlock="50000" data-unlocked="false">
-                                <img src="public/Cars/car4.png" class="w-full h-full object-contain p-1 grayscale">
-                                <div class="absolute inset-0 flex items-center justify-center bg-black/40"><span class="text-[8px] text-white font-bold">50k</span></div>
-                            </button>
-                            <button class="car-btn group relative aspect-square bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all overflow-hidden" data-car="car5" data-speed="380" data-unlock="100000" data-unlocked="false">
-                                <img src="public/Cars/car5.png" class="w-full h-full object-contain p-1 grayscale">
-                                <div class="absolute inset-0 flex items-center justify-center bg-black/40"><span class="text-[8px] text-white font-bold">100k</span></div>
-                            </button>
-                        </div>
-                    </div>
+                <button id="startGameBtn" class="w-full max-w-[320px] py-6 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-3xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.4)] active:scale-95 active:shadow-none transition-all border-b-8 border-red-800 hover:brightness-110">START RACE</button>
+            </div>
+        </div>
 
-                    <!-- Track Panel (Hidden) -->
-                    <div id="panelTrack" class="hidden w-full bg-[#0f3460] bg-opacity-40 p-5 rounded-2xl border border-blue-500/20 shadow-inner">
-                        <p class="text-white text-[10px] font-black uppercase tracking-widest mb-4 opacity-50">Select Destination</p>
-                        <div id="roadSelection" class="grid grid-cols-2 gap-3">
-                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e] rounded-xl border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] pointer-events-auto transition-all" data-road="default" data-unlocked="true">
-                                <img src="public/Background/background.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform">
-                                <span class="relative z-10 font-black italic tracking-tighter text-sm text-white">HIGHWAY</span>
-                                <div class="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            </button>
-                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="autumn" data-unlocked="false" data-distance="7000">
-                                <img src="public/Roads/autumn.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <span class="font-black italic tracking-tighter text-sm text-white">AUTUMN</span>
-                                    <span class="text-[8px] font-bold text-white/50">(7000m)</span>
-                                </div>
-                            </button>
-                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="winter" data-unlocked="false" data-distance="15000">
-                                <img src="public/Roads/winter.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <span class="font-black italic tracking-tighter text-sm text-white">WINTER</span>
-                                    <span class="text-[8px] font-bold text-white/50">(15000m)</span>
-                                </div>
-                            </button>
-                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="desert" data-unlocked="false" data-distance="30000">
-                                <img src="public/Roads/desert.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <span class="font-black italic tracking-tighter text-sm text-white">DESERT</span>
-                                    <span class="text-[8px] font-bold text-white/50">(30000m)</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
+        <!-- Garage Modal -->
+        <div id="modalGarage" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+            <div class="w-full max-w-[600px] bg-[#1a1a2e] rounded-[32px] border-4 border-emerald-500/30 p-8 relative transform scale-90 transition-transform duration-300">
+                <button class="close-modal absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-3xl text-white font-black mb-6 italic uppercase tracking-tighter">THE <span class="text-emerald-500">GARAGE</span></h2>
+                <div id="carSelection" class="grid grid-cols-3 gap-4 mb-8">
+                    <!-- Cars dynamically updated by script.js -->
                 </div>
+            </div>
+        </div>
 
-                <button id="startGameBtn" class="w-full max-w-[320px] py-6 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-3xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.4)] active:scale-95 active:shadow-none transition-all border-b-8 border-red-800">START RACE</button>
+        <!-- Tracks Modal -->
+        <div id="modalTracks" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+            <div class="w-full max-w-[600px] bg-[#1a1a2e] rounded-[32px] border-4 border-blue-500/30 p-8 relative transform scale-90 transition-transform duration-300">
+                <button class="close-modal absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-3xl text-white font-black mb-6 italic uppercase tracking-tighter">SELECT <span class="text-blue-500">ROAD</span></h2>
+                <div id="roadSelection" class="grid grid-cols-2 gap-4">
+                    <!-- Tracks dynamically updated by script.js -->
+                </div>
+            </div>
+        </div>
             </div>
         </div>
 
