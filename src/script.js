@@ -18,7 +18,7 @@ window.addEventListener("load", function () {
     const vw = window.innerWidth;
     
     // For tablets, we can use a slightly wider ratio or just more flexible scaling
-    const targetRatio = 9 / 16;
+    const targetRatio = 1280 / 1280;
     
     let width, height;
     if (vw / vh > targetRatio) {
@@ -254,6 +254,8 @@ window.addEventListener("load", function () {
       this.jumpTimer = 0;
       this.jumpCooldown = 0; // 10 seconds cooldown
       this.maxJumpCooldown = 600; // ~10 seconds at 60fps
+      this.rotation = 0; // Target rotation in radians
+      this.currentRotation = 0; // Current rotation for smooth transition
       
       this.hitbox = { x: 0, y: 0, width: 60, height: 120 };
       this.image = document.getElementById("player");
@@ -268,17 +270,33 @@ window.addEventListener("load", function () {
       this.draw();
     }
     handleInput() {
+      this.rotation = 0;
       // Keyboard Movement
       if (input.codes.includes('KeyW') || input.codes.includes('ArrowUp')) this.pos.y -= 5;
       if (input.codes.includes('KeyS') || input.codes.includes('ArrowDown')) this.pos.y += 5;
-      if (input.codes.includes('KeyA') || input.codes.includes('ArrowLeft')) this.pos.x -= 7;
-      if (input.codes.includes('KeyD') || input.codes.includes('ArrowRight')) this.pos.x += 7;
+      if (input.codes.includes('KeyA') || input.codes.includes('ArrowLeft')) {
+        this.pos.x -= 7;
+        this.rotation = -10 * (Math.PI / 180);
+      }
+      if (input.codes.includes('KeyD') || input.codes.includes('ArrowRight')) {
+        this.pos.x += 7;
+        this.rotation = 10 * (Math.PI / 180);
+      }
       
       // On-screen D-pad logic (held buttons)
       if (input.codes.includes('btnUp')) this.pos.y -= 5;
       if (input.codes.includes('btnDown')) this.pos.y += 5;
-      if (input.codes.includes('btnLeft')) this.pos.x -= 7;
-      if (input.codes.includes('btnRight')) this.pos.x += 7;
+      if (input.codes.includes('btnLeft')) {
+        this.pos.x -= 7;
+        this.rotation = -10 * (Math.PI / 180);
+      }
+      if (input.codes.includes('btnRight')) {
+        this.pos.x += 7;
+        this.rotation = 10 * (Math.PI / 180);
+      }
+
+      // Smooth rotation transition
+      this.currentRotation += (this.rotation - this.currentRotation) * 0.2;
     }
     applyPhysics() {
       // Gravity and Jumping
@@ -314,11 +332,19 @@ window.addEventListener("load", function () {
     }
     draw() {
       ctx.save();
+      
+      // Centering and rotating
+      ctx.translate(this.pos.x + this.width / 2, this.pos.y + this.height / 2);
+      ctx.rotate(this.currentRotation);
+      ctx.translate(-(this.pos.x + this.width / 2), -(this.pos.y + this.height / 2));
+
       // Shadow
+      ctx.save();
       ctx.fillStyle = "rgba(0,0,0,0.3)";
       ctx.beginPath();
       ctx.ellipse(this.pos.x + this.width/2, this.pos.y + this.height - 10, 30 + this.z/5, 15 + this.z/10, 0, 0, Math.PI*2);
       ctx.fill();
+      ctx.restore();
       
       // Scale based on height (z)
       const scale = 1 + this.z / 500;
