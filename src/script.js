@@ -68,7 +68,25 @@ window.addEventListener("load", function () {
   const CANVAS_WIDTH = 720;
   const CANVAS_HEIGHT = 1280;
 
-  const backgroundMusic = new Audio();
+  // --- Audio System ---
+  const sounds = {
+    driving: new Audio('public/Audio/driving.mp3'),
+    crash: new Audio('public/Audio/crash.mp3'),
+    booster: new Audio('public/Audio/booster.mp3'),
+    pickup: new Audio('public/Audio/pickup.mp3'),
+    win: new Audio('public/Audio/win.mp3'),
+    gameover: new Audio('public/Audio/gameover.mp3'),
+    select: new Audio('public/Audio/select.mp3')
+  };
+
+  sounds.driving.loop = true;
+
+  function playSound(name) {
+    if (sounds[name]) {
+      sounds[name].currentTime = 0;
+      sounds[name].play().catch(() => {});
+    }
+  }
 
   let score = 0;
   let metersTraveled = 0;
@@ -130,18 +148,23 @@ window.addEventListener("load", function () {
       }, { passive: false });
 
       startGameBtn.addEventListener("click", () => {
+        playSound('select');
         startGameEl.style.display = "none";
-        backgroundMusic.play().catch(() => {});
+        sounds.driving.play().catch(() => {});
         init();
       });
       restartGameBtn.addEventListener("click", () => {
+        playSound('select');
         restartGameEl.style.display = "none";
         init();
       });
 
       backToLobbyBtn.addEventListener("click", () => {
+        playSound('select');
         restartGameEl.style.display = "none";
         startGameEl.style.display = "flex";
+        sounds.driving.pause();
+        sounds.driving.currentTime = 0;
       });
 
       // On-screen controls
@@ -514,6 +537,7 @@ window.addEventListener("load", function () {
   document.querySelectorAll('.car-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.dataset.unlocked === "true") {
+        playSound('select');
         document.querySelectorAll('.car-btn').forEach(b => {
           b.classList.remove('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
           b.classList.add('border-white/5');
@@ -530,6 +554,7 @@ window.addEventListener("load", function () {
   document.querySelectorAll('.road-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.dataset.unlocked === "true") {
+        playSound('select');
         document.querySelectorAll('.road-btn').forEach(b => {
           b.classList.remove('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
           b.classList.add('border-white/10');
@@ -666,10 +691,12 @@ window.addEventListener("load", function () {
       if (checkCollision(player, enemy)) {
         if (boosterActive > 0) {
           // Smash enemies while boosting!
+          playSound('crash');
           explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
           enemies.splice(i, 1);
           score += 100; // Increased bonus points
         } else {
+          playSound('crash');
           player.health -= 20;
           explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
           enemies.splice(i, 1);
@@ -682,9 +709,11 @@ window.addEventListener("load", function () {
       const drop = drops[i];
       drop.update();
       if (checkCollision(player, drop)) {
+        playSound('pickup');
         if (drop instanceof FuelDrop) {
           player.fuel = Math.min(100, player.fuel + drop.amount);
         } else if (drop instanceof BoosterDrop) {
+          playSound('booster');
           boosterActive = 420; // Increased duration to ~7 seconds
         } else if (drop instanceof HealthDrop) {
           player.health = Math.min(100, player.health + drop.amount);
@@ -736,6 +765,9 @@ window.addEventListener("load", function () {
 
     if (player.health <= 0 || player.fuel <= 0) {
       gameOver = true;
+      sounds.driving.pause();
+      sounds.driving.currentTime = 0;
+      playSound('gameover');
       const finalDistance = Math.floor(metersTraveled);
       if (finalDistance > bestDistance) {
         bestDistance = finalDistance;
