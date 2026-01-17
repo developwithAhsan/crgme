@@ -740,6 +740,9 @@ window.addEventListener("load", function () {
     { id: 'desert', name: 'DESERT', dist: 30000, img: 'public/Roads/desert.png' }
   ];
 
+  const carSelectionContainer = document.getElementById('carSelection');
+  const roadSelectionContainer = document.getElementById('roadSelection');
+
   function renderSelectionUI() {
     if (!carSelectionContainer || !roadSelectionContainer) return;
 
