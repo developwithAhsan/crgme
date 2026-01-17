@@ -622,9 +622,11 @@ window.addEventListener("load", function () {
   const modalGarage = document.getElementById('modalGarage');
   const modalTracks = document.getElementById('modalTracks');
   const modalSettings = document.getElementById('modalSettings');
+  const modalAbout = document.getElementById('modalAbout');
   const btnOpenGarage = document.getElementById('btnOpenGarage');
   const btnOpenTracks = document.getElementById('btnOpenTracks');
   const btnOpenSettings = document.getElementById('btnOpenSettings');
+  const btnOpenAbout = document.getElementById('btnOpenAbout');
 
   let musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
   let sfxEnabled = localStorage.getItem('sfxEnabled') !== 'false';
@@ -635,10 +637,12 @@ window.addEventListener("load", function () {
   }
 
   function closeModal() {
-    const modals = [modalGarage, modalTracks, modalSettings];
+    const modals = [modalGarage, modalTracks, modalSettings, modalAbout];
     modals.forEach(m => {
-      m.classList.remove('modal-open');
-      setTimeout(() => m.classList.add('hidden'), 300);
+      if (m) {
+        m.classList.remove('modal-open');
+        setTimeout(() => m.classList.add('hidden'), 300);
+      }
     });
   }
 
@@ -654,6 +658,12 @@ window.addEventListener("load", function () {
     playSound('select');
     openModal(modalSettings);
   });
+  if (btnOpenAbout) {
+    btnOpenAbout.addEventListener('click', () => {
+      playSound('select');
+      openModal(modalAbout);
+    });
+  }
   document.querySelectorAll('.close-modal').forEach(btn => {
     btn.addEventListener('click', closeModal);
   });

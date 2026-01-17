@@ -59,8 +59,39 @@
                         </button>
                     </div>
 
-                    <div class="pt-4 opacity-30 text-center">
-                        <p class="text-[10px] text-white font-bold uppercase tracking-[0.2em]">Ultra Racer v1.2</p>
+                    <div class="pt-4 space-y-4">
+                        <button id="btnOpenAbout" class="w-full py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold tracking-wider border border-white/10 transition-all active:scale-95 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            ABOUT US
+                        </button>
+                        <div class="opacity-30 text-center">
+                            <p class="text-[10px] text-white font-bold uppercase tracking-[0.2em]">Ultra Racer v1.2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Us Modal -->
+        <div id="modalAbout" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+            <div class="w-full max-w-[400px] bg-[#1a1a2e] rounded-[32px] border-4 border-blue-500/30 p-8 relative transform scale-90 transition-transform duration-300">
+                <button class="close-modal absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <h2 class="text-3xl text-white font-black mb-6 italic uppercase tracking-tighter">ABOUT <span class="text-blue-500">US</span></h2>
+                
+                <div class="space-y-6 text-center">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/5">
+                        <p class="text-blue-300 text-xs font-black uppercase tracking-widest mb-2">Developed By</p>
+                        <p class="text-3xl text-white font-black italic">AHSAN</p>
+                    </div>
+                    
+                    <div class="text-white/70 text-sm leading-relaxed font-medium">
+                        <p>Ultra Racer is a high-octane survival game designed for speed enthusiasts. Master the highway, unlock exotic cars, and conquer diverse terrains in the ultimate racing challenge.</p>
+                    </div>
+
+                    <div class="pt-4">
+                        <p class="text-[10px] text-white/30 font-bold uppercase tracking-[0.3em]">© 2026 ULTRA RACER STUDIOS</p>
                     </div>
                 </div>
             </div>
