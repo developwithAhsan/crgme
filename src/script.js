@@ -548,7 +548,16 @@ window.addEventListener("load", function () {
     
     const jumpReady = player.jumpCooldown === 0;
     ctx.fillStyle = jumpReady ? "#44ff44" : "#ff4444";
-    ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${Math.ceil(player.jumpCooldown / 60)}S`, 20, 105);
+    const cooldownSec = Math.ceil(player.jumpCooldown / 60);
+    ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${cooldownSec}S`, 20, 105);
+    
+    // Progress bar for jump cooldown
+    if (!jumpReady) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+      ctx.fillRect(20, 115, 150, 5);
+      ctx.fillStyle = "#ff4444";
+      ctx.fillRect(20, 115, 150 * (player.jumpCooldown / player.maxJumpCooldown), 5);
+    }
 
     // Score
     score += Math.floor(gameSpeed / 5);
