@@ -723,48 +723,9 @@ window.addEventListener("load", function () {
     });
   }
 
-  // --- Three.js 3D Car Preview ---
-  let scene, camera, renderer, carModel;
-  function initThreeJs() {
-    const container = document.getElementById('threeJsCanvas');
-    if (!container) return;
-
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
-
-    camera.position.set(0, 1.5, 4);
-    camera.lookAt(0, 0, 0);
-
-    const loader = new THREE.GLTFLoader();
-    loader.load('public/Models/car.glb', (gltf) => {
-      carModel = gltf.scene;
-      scene.add(carModel);
-      carModel.scale.set(1.5, 1.5, 1.5);
-      carModel.rotation.y = Math.PI / 4;
-    });
-
-    function animateThree() {
-      requestAnimationFrame(animateThree);
-      if (carModel) carModel.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    }
-    animateThree();
-  }
-
-  // Import Three.js GLTFLoader
+  // --- Three.js (Removed) ---
   const script = document.createElement('script');
-  script.src = 'https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js';
   script.onload = () => {
-    initThreeJs();
     renderSelectionUI();
   };
   document.head.appendChild(script);

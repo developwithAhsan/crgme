@@ -11,28 +11,25 @@
     </head>
     <body class="m-0 bg-[#0a0a14] flex justify-center items-center min-h-screen overflow-hidden font-sans">
         <!-- Start Game Lobby -->
-        <div class="fixed flex items-center justify-center z-50 p-4 pointer-events-none" id="startGameEl">
-            <div class="w-full h-full max-w-[720px] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-[32px] border-b-8 border-r-8 border-[#0f3460] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center p-8 text-center pointer-events-auto overflow-hidden">
-                <div class="mb-4">
-                    <h1 class="text-6xl text-white font-black tracking-tighter mb-1 italic">ULTRA<span class="text-red-500">RACER</span></h1>
-                    <div class="h-1.5 w-32 bg-red-500 mx-auto rounded-full"></div>
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-0 pointer-events-none" id="startGameEl">
+            <div class="w-full h-full max-w-[720px] bg-cover bg-center relative flex flex-col items-center justify-between p-8 text-center pointer-events-auto overflow-hidden" style="background-image: url('attached_assets/ChatGPT_Image_Jan_18,_2026,_12_55_39_AM_1768679744931.png');">
+                <!-- Title at the top -->
+                <div class="mt-8 relative z-10">
+                    <h1 class="text-6xl text-white font-black tracking-tighter mb-1 italic drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">ULTRA<span class="text-red-500">RACER</span></h1>
+                    <div class="h-1.5 w-32 bg-red-500 mx-auto rounded-full shadow-lg"></div>
+                    <p class="text-blue-300 mt-2 text-sm font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">High-Speed Survival</p>
                 </div>
                 
-                <p class="text-blue-300 mb-4 text-sm font-black tracking-[0.2em] uppercase">High-Speed Survival</p>
-                
-                <!-- 3D Car Preview Container -->
-                <div id="threeJsContainer" class="w-full h-48 mb-6 bg-black/20 rounded-2xl border border-white/5 relative group cursor-grab active:cursor-grabbing">
-                    <div class="absolute top-2 right-4 text-[10px] text-white/30 font-bold uppercase tracking-widest">3D Preview</div>
-                    <div id="threeJsCanvas" class="w-full h-full"></div>
+                <!-- Side Selection Buttons -->
+                <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-8 w-full pointer-events-none">
+                    <button id="btnOpenGarage" class="py-6 px-8 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-[0_10px_20px_rgba(16,185,129,0.5)] active:scale-95 transition-all border-b-4 border-emerald-700 animate-pulse-slow pointer-events-auto">GARAGE</button>
+                    <button id="btnOpenTracks" class="py-6 px-8 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-[0_10px_20px_rgba(59,130,246,0.5)] active:scale-95 transition-all border-b-4 border-blue-700 pointer-events-auto">TRACKS</button>
                 </div>
 
-                <!-- Selection Buttons -->
-                <div class="flex gap-4 mb-8 w-full max-w-[400px]">
-                    <button id="btnOpenGarage" class="flex-1 py-4 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(16,185,129,0.3)] active:scale-95 transition-all border-b-4 border-emerald-700 animate-pulse-slow">GARAGE</button>
-                    <button id="btnOpenTracks" class="flex-1 py-4 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-[0_10px_20px_rgba(59,130,246,0.3)] active:scale-95 transition-all border-b-4 border-blue-700">TRACKS</button>
+                <!-- Start Button at the bottom -->
+                <div class="mb-12 w-full flex justify-center">
+                    <button id="startGameBtn" class="w-full max-w-[400px] py-8 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-4xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.6)] active:scale-95 active:shadow-none transition-all border-b-8 border-red-800 hover:brightness-110">START RACE</button>
                 </div>
-
-                <button id="startGameBtn" class="w-full max-w-[320px] py-6 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-3xl font-black text-3xl uppercase tracking-widest shadow-[0_15px_30px_rgba(239,68,68,0.4)] active:scale-95 active:shadow-none transition-all border-b-8 border-red-800 hover:brightness-110">START RACE</button>
             </div>
         </div>
 
