@@ -69,6 +69,8 @@ window.addEventListener("load", function () {
 
   let score = 0;
   let metersTraveled = 0;
+  let bestDistance = localStorage.getItem('highwayRacerBestDistance') || 0;
+  let selectedRoad = 'background';
   let drops = [];
   let explosions = [];
   let enemies = [];
@@ -179,7 +181,10 @@ window.addEventListener("load", function () {
       this.y = 0;
       this.width = CANVAS_WIDTH;
       this.height = CANVAS_HEIGHT;
-      this.image = document.getElementById("background");
+      this.updateImage();
+    }
+    updateImage() {
+      this.image = document.getElementById(selectedRoad);
     }
     update() {
       this.y += gameSpeed;
@@ -453,6 +458,34 @@ window.addEventListener("load", function () {
   const player = new Player();
   const input = new InputHandler();
   const background = new Background();
+  
+  function updateRoadButtons() {
+    document.querySelectorAll('.road-btn').forEach(btn => {
+      const distance = parseInt(btn.dataset.distance) || 0;
+      const road = btn.dataset.road;
+      if (bestDistance >= distance) {
+        btn.dataset.unlocked = "true";
+        btn.classList.remove('bg-gray-900', 'text-gray-400', 'opacity-50');
+        btn.classList.add('bg-gray-700', 'text-white');
+        btn.innerText = road.charAt(0).toUpperCase() + road.slice(1);
+        if (road === 'default') btn.innerText = 'Highway';
+      }
+    });
+  }
+
+  document.querySelectorAll('.road-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.unlocked === "true") {
+        document.querySelectorAll('.road-btn').forEach(b => b.classList.remove('border-green-500'));
+        btn.classList.add('border-green-500');
+        selectedRoad = btn.dataset.road === 'default' ? 'background' : 'road_' + btn.dataset.road;
+        background.updateImage();
+      }
+    });
+  });
+
+  updateRoadButtons();
+
   const healthBar = new StatusBar(20, 40, "HEALTH", "#ff4444");
   const fuelBar = new StatusBar(CANVAS_WIDTH - 170, 40, "FUEL", "#ffcc00");
 
@@ -575,6 +608,11 @@ window.addEventListener("load", function () {
 
     if (player.health <= 0 || player.fuel <= 0) {
       gameOver = true;
+      if (metersTraveled > bestDistance) {
+        bestDistance = metersTraveled;
+        localStorage.setItem('highwayRacerBestDistance', bestDistance);
+      }
+      updateRoadButtons();
       scoreEl.innerText = score;
       metersEl.innerText = metersTraveled;
       restartGameEl.style.display = "flex";
