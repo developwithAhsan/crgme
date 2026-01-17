@@ -65,18 +65,31 @@
                     <div id="panelTrack" class="hidden w-full bg-[#0f3460] bg-opacity-40 p-5 rounded-2xl border border-blue-500/20 shadow-inner">
                         <p class="text-white text-[10px] font-black uppercase tracking-widest mb-4 opacity-50">Select Destination</p>
                         <div id="roadSelection" class="grid grid-cols-2 gap-3">
-                            <button class="road-btn group relative overflow-hidden bg-[#1a1a2e] text-white py-3 px-2 rounded-xl border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] pointer-events-auto transition-all" data-road="default" data-unlocked="true">
-                                <span class="relative z-10 font-bold">HIGHWAY</span>
+                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e] rounded-xl border-2 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] pointer-events-auto transition-all" data-road="default" data-unlocked="true">
+                                <img src="public/Background/background.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform">
+                                <span class="relative z-10 font-black italic tracking-tighter text-sm text-white">HIGHWAY</span>
                                 <div class="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </button>
-                            <button class="road-btn group relative overflow-hidden bg-[#1a1a2e]/50 text-gray-500 py-3 px-2 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="autumn" data-unlocked="false" data-distance="7000">
-                                <span class="relative z-10 font-bold">AUTUMN</span>
+                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="autumn" data-unlocked="false" data-distance="7000">
+                                <img src="public/Roads/autumn.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
+                                <div class="relative z-10 flex flex-col items-center">
+                                    <span class="font-black italic tracking-tighter text-sm text-white">AUTUMN</span>
+                                    <span class="text-[8px] font-bold text-white/50">(7000m)</span>
+                                </div>
                             </button>
-                            <button class="road-btn group relative overflow-hidden bg-[#1a1a2e]/50 text-gray-500 py-3 px-2 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="winter" data-unlocked="false" data-distance="15000">
-                                <span class="relative z-10 font-bold">WINTER</span>
+                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="winter" data-unlocked="false" data-distance="15000">
+                                <img src="public/Roads/winter.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
+                                <div class="relative z-10 flex flex-col items-center">
+                                    <span class="font-black italic tracking-tighter text-sm text-white">WINTER</span>
+                                    <span class="text-[8px] font-bold text-white/50">(15000m)</span>
+                                </div>
                             </button>
-                            <button class="road-btn group relative overflow-hidden bg-[#1a1a2e]/50 text-gray-500 py-3 px-2 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="desert" data-unlocked="false" data-distance="30000">
-                                <span class="relative z-10 font-bold">DESERT</span>
+                            <button class="road-btn group relative h-24 overflow-hidden bg-[#1a1a2e]/50 rounded-xl border-2 border-white/5 opacity-60 pointer-events-auto transition-all" data-road="desert" data-unlocked="false" data-distance="30000">
+                                <img src="public/Roads/desert.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform grayscale">
+                                <div class="relative z-10 flex flex-col items-center">
+                                    <span class="font-black italic tracking-tighter text-sm text-white">DESERT</span>
+                                    <span class="text-[8px] font-bold text-white/50">(30000m)</span>
+                                </div>
                             </button>
                         </div>
                     </div>
