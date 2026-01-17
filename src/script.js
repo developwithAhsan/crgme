@@ -444,7 +444,7 @@ window.addEventListener("load", function () {
     player.pos.x = CANVAS_WIDTH/2 - player.width/2;
     player.pos.y = CANVAS_HEIGHT * 0.8;
     gameOver = false;
-    gameSpeed = 5;
+    gameSpeed = 8; // Increased from 5
     boosterActive = 0;
     document.getElementById('gameControls').style.display = 'block';
     animate(0);
@@ -457,7 +457,7 @@ window.addEventListener("load", function () {
   const fuelBar = new StatusBar(CANVAS_WIDTH - 170, 40, "FUEL", "#ffcc00");
 
   let lastTime = 0;
-  let gameSpeed = 5;
+  let gameSpeed = 8; // Increased from 5
   let gameOver = false;
   let enemyTimer = 0;
 
@@ -475,17 +475,17 @@ window.addEventListener("load", function () {
 
     if (boosterActive > 0) {
       boosterActive--;
-      gameSpeed = 15;
+      gameSpeed = 25; // Increased from 15
       // Visual feedback for boosting
-      ctx.fillStyle = "rgba(0, 255, 255, 0.1)";
+      ctx.fillStyle = "rgba(0, 255, 255, 0.2)";
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     } else {
-      gameSpeed = 5;
+      if (gameSpeed > 20) gameSpeed = 10; // Reset after booster
     }
 
     // Spawn enemies
     enemyTimer += deltaTime || 0;
-    if (enemyTimer > 1000) {
+    if (enemyTimer > 800) { // Reduced from 1000 for more enemies
       const id = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
       const img = document.getElementById(id);
       if (img) {
@@ -495,9 +495,9 @@ window.addEventListener("load", function () {
     }
 
     // Spawn Drops
-    if (Math.random() < 0.005) drops.push(new FuelDrop());
-    if (Math.random() < 0.002) drops.push(new BoosterDrop());
-    if (Math.random() < 0.003) drops.push(new HealthDrop());
+    if (Math.random() < 0.007) drops.push(new FuelDrop()); // Increased spawn rates
+    if (Math.random() < 0.003) drops.push(new BoosterDrop());
+    if (Math.random() < 0.004) drops.push(new HealthDrop());
 
     enemies = enemies.filter(e => e.y < CANVAS_HEIGHT + 200);
     for (let i = enemies.length - 1; i >= 0; i--) {
@@ -508,7 +508,7 @@ window.addEventListener("load", function () {
           // Smash enemies while boosting!
           explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
           enemies.splice(i, 1);
-          score += 50;
+          score += 100; // Increased bonus points
         } else {
           player.health -= 20;
           explosions.push(new Explosion(enemy.x + 40, enemy.y + 70));
@@ -525,7 +525,7 @@ window.addEventListener("load", function () {
         if (drop instanceof FuelDrop) {
           player.fuel = Math.min(100, player.fuel + drop.amount);
         } else if (drop instanceof BoosterDrop) {
-          boosterActive = 300; // ~5 seconds at 60fps
+          boosterActive = 420; // Increased duration to ~7 seconds
         } else if (drop instanceof HealthDrop) {
           player.health = Math.min(100, player.health + drop.amount);
         }
@@ -537,7 +537,7 @@ window.addEventListener("load", function () {
     explosions.forEach(e => e.update());
 
     // Progressive Speed Increase
-    gameSpeed += 0.0005;
+    gameSpeed += 0.001; // Increased acceleration from 0.0005
 
     player.update();
     healthBar.draw(player.health, 100);
