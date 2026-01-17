@@ -75,6 +75,8 @@ window.addEventListener("load", function () {
   let bestDistance = parseInt(localStorage.getItem('highwayRacerBestDistance')) || 0;
   let highScore = parseInt(localStorage.getItem('highwayRacerHighScore')) || 0;
   let selectedRoad = 'background';
+  let selectedCar = 'car1';
+  let playerBaseSpeed = 250;
   let drops = [];
   let explosions = [];
   let enemies = [];
@@ -458,7 +460,7 @@ window.addEventListener("load", function () {
     player.pos.x = CANVAS_WIDTH/2 - player.width/2;
     player.pos.y = CANVAS_HEIGHT * 0.8;
     gameOver = false;
-    gameSpeed = 8; // Increased from 5
+    gameSpeed = playerBaseSpeed / 30; // Scale base speed
     boosterActive = 0;
     document.getElementById('gameControls').style.display = 'block';
     animate(0);
@@ -487,7 +489,43 @@ window.addEventListener("load", function () {
         btn.innerHTML = `<span class="relative z-10 font-bold opacity-30 text-[10px]">${road.toUpperCase()} (${distance}m)</span>`;
       }
     });
+
+    // Update Car Buttons based on High Score
+    document.querySelectorAll('.car-btn').forEach(btn => {
+      const unlockScore = parseInt(btn.dataset.unlock) || 0;
+      const img = btn.querySelector('img');
+      const lockOverlay = btn.querySelector('div.absolute');
+      
+      if (highScore >= unlockScore) {
+        btn.dataset.unlocked = "true";
+        btn.classList.remove('opacity-60', 'border-white/5', 'bg-[#1a1a2e]/50');
+        btn.classList.add('opacity-100', 'bg-[#1a1a2e]');
+        if (img) img.classList.remove('grayscale');
+        if (lockOverlay && lockOverlay.querySelector('span')) lockOverlay.classList.add('hidden');
+      } else {
+        btn.dataset.unlocked = "false";
+        btn.classList.add('opacity-60', 'border-white/5', 'bg-[#1a1a2e]/50');
+        if (img) img.classList.add('grayscale');
+        if (lockOverlay) lockOverlay.classList.remove('hidden');
+      }
+    });
   }
+
+  document.querySelectorAll('.car-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.unlocked === "true") {
+        document.querySelectorAll('.car-btn').forEach(b => {
+          b.classList.remove('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
+          b.classList.add('border-white/5');
+        });
+        btn.classList.remove('border-white/5');
+        btn.classList.add('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
+        selectedCar = btn.dataset.car;
+        playerBaseSpeed = parseInt(btn.dataset.speed);
+        player.image.src = `public/Cars/${selectedCar}.png`;
+      }
+    });
+  });
 
   document.querySelectorAll('.road-btn').forEach(btn => {
     btn.addEventListener('click', () => {
