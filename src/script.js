@@ -70,13 +70,14 @@ window.addEventListener("load", function () {
 
   // --- Audio System ---
   const sounds = {
-    driving: new Audio('public/Audio/driving.mp3'),
+    driving: new Audio('public/Audio/driving.wav'),
     crash: new Audio('public/Audio/crash.mp3'),
     booster: new Audio('public/Audio/booster.mp3'),
     pickup: new Audio('public/Audio/pickup.mp3'),
     win: new Audio('public/Audio/win.mp3'),
     gameover: new Audio('public/Audio/gameover.mp3'),
-    select: new Audio('public/Audio/select.mp3')
+    select: new Audio('public/Audio/select.mp3'),
+    jump: new Audio('public/Audio/jump.mp3')
   };
 
   sounds.driving.loop = true;
@@ -291,6 +292,7 @@ window.addEventListener("load", function () {
       if (this.z === 0 && this.jumpCooldown <= 0) {
         this.vz = 15;
         this.jumpCooldown = this.maxJumpCooldown;
+        playSound('jump');
         console.log("Jump activated, cooldown set to:", this.jumpCooldown);
       } else {
         console.log("Jump blocked. z:", this.z, "cooldown:", this.jumpCooldown);
