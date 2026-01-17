@@ -392,8 +392,8 @@ window.addEventListener("load", function () {
     update() {
       this.y += this.speed + gameSpeed/2;
       // Very tight hitbox for enemy: 70% of width, 85% of height, centered
-      this.hitbox.width = this.width * 0.1;
-      this.hitbox.height = this.height * 0.1;
+      this.hitbox.width = this.width * 0.7;
+      this.hitbox.height = this.height * 0.85;
       this.hitbox.x = this.x + (this.width - this.hitbox.width) / 2;
       this.hitbox.y = this.y + (this.height - this.hitbox.height) / 2;
       this.draw();
