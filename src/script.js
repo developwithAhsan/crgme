@@ -476,16 +476,15 @@ window.addEventListener("load", function () {
       
       if (bestDistance >= distance) {
         btn.dataset.unlocked = "true";
-        btn.classList.remove('bg-gray-900', 'text-gray-400', 'opacity-50');
-        btn.classList.add('bg-gray-700', 'text-white', 'cursor-pointer');
-        btn.innerText = road.charAt(0).toUpperCase() + road.slice(1);
-        if (road === 'default') btn.innerText = 'Highway';
+        btn.classList.remove('text-gray-500', 'bg-[#1a1a2e]/50', 'opacity-60', 'border-white/5');
+        btn.classList.add('text-white', 'bg-[#1a1a2e]', 'cursor-pointer', 'border-white/10');
+        btn.innerHTML = `<span class="relative z-10 font-black italic tracking-tighter text-sm">${road.toUpperCase()}</span>`;
+        if (road === 'default') btn.querySelector('span').innerText = 'HIGHWAY';
       } else {
         btn.dataset.unlocked = "false";
-        btn.classList.add('bg-gray-900', 'text-gray-400', 'opacity-50');
-        btn.classList.remove('bg-gray-700', 'text-white', 'cursor-pointer', 'border-green-500');
-        btn.innerText = (road.charAt(0).toUpperCase() + road.slice(1)) + ` (${distance}m)`;
-        if (road === 'default') btn.innerText = 'Highway';
+        btn.classList.add('text-gray-500', 'bg-[#1a1a2e]/50', 'opacity-60', 'border-white/5');
+        btn.classList.remove('text-white', 'bg-[#1a1a2e]', 'cursor-pointer', 'border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
+        btn.innerHTML = `<span class="relative z-10 font-bold opacity-30 text-[10px]">${road.toUpperCase()} (${distance}m)</span>`;
       }
     });
   }
@@ -493,8 +492,12 @@ window.addEventListener("load", function () {
   document.querySelectorAll('.road-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.dataset.unlocked === "true") {
-        document.querySelectorAll('.road-btn').forEach(b => b.classList.remove('border-green-500'));
-        btn.classList.add('border-green-500');
+        document.querySelectorAll('.road-btn').forEach(b => {
+          b.classList.remove('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
+          b.classList.add('border-white/10');
+        });
+        btn.classList.remove('border-white/10');
+        btn.classList.add('border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.3)]');
         selectedRoad = btn.dataset.road === 'default' ? 'background' : 'road_' + btn.dataset.road;
         background.updateImage();
       }
