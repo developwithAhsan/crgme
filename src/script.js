@@ -105,9 +105,7 @@ window.addEventListener("load", function () {
         this.touchY = touch.clientY;
         
         // Jump mechanic on touch
-        if (player.jumpTimer === 0) {
-          player.jump();
-        }
+        player.jump();
       });
 
       canvas.addEventListener("touchmove", (e) => {
@@ -167,7 +165,7 @@ window.addEventListener("load", function () {
       if (jumpBtn) {
         const handleJump = (e) => {
           e.preventDefault();
-          if (player.jumpTimer === 0) player.jump();
+          player.jump();
         };
         jumpBtn.addEventListener('touchstart', handleJump);
         jumpBtn.addEventListener('mousedown', handleJump);
@@ -211,6 +209,8 @@ window.addEventListener("load", function () {
       this.vz = 0;
       this.gravity = 0.6;
       this.jumpTimer = 0;
+      this.jumpCooldown = 0; // 10 seconds cooldown
+      this.maxJumpCooldown = 600; // ~10 seconds at 60fps
       
       this.hitbox = { x: 0, y: 0, width: 60, height: 120 };
       this.image = document.getElementById("player");
@@ -221,6 +221,7 @@ window.addEventListener("load", function () {
       this.handleBoundaries();
       this.updateHitbox();
       this.fuel -= this.fuelDecrement;
+      if (this.jumpCooldown > 0) this.jumpCooldown--;
       this.draw();
     }
     handleInput() {
@@ -246,12 +247,11 @@ window.addEventListener("load", function () {
           this.vz = 0;
         }
       }
-      if (this.jumpTimer > 0) this.jumpTimer--;
     }
     jump() {
-      if (this.z === 0) {
+      if (this.z === 0 && this.jumpCooldown === 0) {
         this.vz = 15;
-        this.jumpTimer = 20;
+        this.jumpCooldown = this.maxJumpCooldown;
       }
     }
     updateHitbox() {
@@ -397,6 +397,31 @@ window.addEventListener("load", function () {
     }
   }
 
+  class HealthDrop {
+    constructor() {
+      this.width = 60;
+      this.height = 60;
+      this.x = Math.random() * (CANVAS_WIDTH - 100) + 50;
+      this.y = -100;
+      this.speed = gameSpeed;
+      this.image = document.getElementById("health");
+      this.hitbox = { x: 0, y: 0, width: 40, height: 40 };
+      this.amount = 25;
+    }
+    update() {
+      this.y += this.speed;
+      this.hitbox.x = this.x + 10;
+      this.hitbox.y = this.y + 10;
+      this.draw();
+    }
+    draw() {
+      ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+      ctx.fillStyle = "#ff4444";
+      ctx.font = "bold 14px Arial";
+      ctx.fillText(`+${this.amount}HP`, this.x + 5, this.y - 5);
+    }
+  }
+
   function checkCollision(a, b) {
     if (player.z > 20) return false; // Can jump over things
     return a.hitbox.x < b.hitbox.x + b.hitbox.width &&
@@ -469,6 +494,7 @@ window.addEventListener("load", function () {
     // Spawn Drops
     if (Math.random() < 0.005) drops.push(new FuelDrop());
     if (Math.random() < 0.002) drops.push(new BoosterDrop());
+    if (Math.random() < 0.003) drops.push(new HealthDrop());
 
     enemies = enemies.filter(e => e.y < CANVAS_HEIGHT + 200);
     for (let i = enemies.length - 1; i >= 0; i--) {
@@ -497,6 +523,8 @@ window.addEventListener("load", function () {
           player.fuel = Math.min(100, player.fuel + drop.amount);
         } else if (drop instanceof BoosterDrop) {
           boosterActive = 300; // ~5 seconds at 60fps
+        } else if (drop instanceof HealthDrop) {
+          player.health = Math.min(100, player.health + drop.amount);
         }
         drops.splice(i, 1);
       }
@@ -505,9 +533,22 @@ window.addEventListener("load", function () {
     explosions = explosions.filter(e => e.frame < e.maxFrame);
     explosions.forEach(e => e.update());
 
+    // Progressive Speed Increase
+    gameSpeed += 0.0005;
+
     player.update();
     healthBar.draw(player.health, 100);
     fuelBar.draw(player.fuel, 100);
+
+    // Speed Meter & Jump Cooldown
+    ctx.fillStyle = "white";
+    ctx.font = "bold 18px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText(`SPEED: ${Math.round(gameSpeed * 10)} KM/H`, 20, 80);
+    
+    const jumpReady = player.jumpCooldown === 0;
+    ctx.fillStyle = jumpReady ? "#44ff44" : "#ff4444";
+    ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${Math.ceil(player.jumpCooldown / 60)}S`, 20, 105);
 
     // Score
     score += Math.floor(gameSpeed / 5);
