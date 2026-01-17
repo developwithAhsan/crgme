@@ -469,14 +469,22 @@ window.addEventListener("load", function () {
   const background = new Background();
   
   function updateRoadButtons() {
+    console.log("Updating road buttons. Best distance:", bestDistance);
     document.querySelectorAll('.road-btn').forEach(btn => {
       const distance = parseInt(btn.dataset.distance) || 0;
       const road = btn.dataset.road;
+      
       if (bestDistance >= distance) {
         btn.dataset.unlocked = "true";
         btn.classList.remove('bg-gray-900', 'text-gray-400', 'opacity-50');
         btn.classList.add('bg-gray-700', 'text-white', 'cursor-pointer');
         btn.innerText = road.charAt(0).toUpperCase() + road.slice(1);
+        if (road === 'default') btn.innerText = 'Highway';
+      } else {
+        btn.dataset.unlocked = "false";
+        btn.classList.add('bg-gray-900', 'text-gray-400', 'opacity-50');
+        btn.classList.remove('bg-gray-700', 'text-white', 'cursor-pointer', 'border-green-500');
+        btn.innerText = (road.charAt(0).toUpperCase() + road.slice(1)) + ` (${distance}m)`;
         if (road === 'default') btn.innerText = 'Highway';
       }
     });
@@ -617,9 +625,11 @@ window.addEventListener("load", function () {
 
     if (player.health <= 0 || player.fuel <= 0) {
       gameOver = true;
-      if (metersTraveled > bestDistance) {
-        bestDistance = metersTraveled;
+      const finalDistance = Math.floor(metersTraveled);
+      if (finalDistance > bestDistance) {
+        bestDistance = finalDistance;
         localStorage.setItem('highwayRacerBestDistance', bestDistance);
+        console.log("New record! Best distance saved:", bestDistance);
       }
       if (score > highScore) {
         highScore = score;
@@ -627,7 +637,7 @@ window.addEventListener("load", function () {
       }
       updateRoadButtons();
       scoreEl.innerText = score;
-      metersEl.innerText = metersTraveled;
+      metersEl.innerText = finalDistance;
       highScoreEl.innerText = highScore;
       bestMetersEl.innerText = bestDistance;
       restartGameEl.style.display = "flex";
