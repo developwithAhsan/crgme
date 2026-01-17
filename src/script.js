@@ -598,6 +598,7 @@ window.addEventListener("load", function () {
     ctx.font = "bold 18px Arial";
     ctx.textAlign = "left";
     ctx.fillText(`SPEED: ${Math.round(gameSpeed * 10)} KM/H`, 20, 80);
+    ctx.fillText(`DISTANCE: ${Math.floor(metersTraveled)} M`, 20, 105);
     
     // Debug info on screen
     // ctx.fillText(`Z: ${Math.round(player.z)} CD: ${player.jumpCooldown}`, 20, 130);
@@ -605,14 +606,14 @@ window.addEventListener("load", function () {
     const jumpReady = player.jumpCooldown <= 0;
     ctx.fillStyle = jumpReady ? "#44ff44" : "#ff4444";
     const cooldownSec = Math.ceil(player.jumpCooldown / 60);
-    ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${cooldownSec}S`, 20, 105);
+    ctx.fillText(jumpReady ? "JUMP READY" : `JUMP IN: ${cooldownSec}S`, 20, 130);
     
     // Progress bar for jump cooldown
     if (!jumpReady) {
       ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-      ctx.fillRect(20, 115, 150, 5);
+      ctx.fillRect(20, 140, 150, 5);
       ctx.fillStyle = "#ff4444";
-      ctx.fillRect(20, 115, 150 * (player.jumpCooldown / player.maxJumpCooldown), 5);
+      ctx.fillRect(20, 140, 150 * (player.jumpCooldown / player.maxJumpCooldown), 5);
     }
 
     // Score
