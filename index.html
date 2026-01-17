@@ -28,11 +28,16 @@
         <div class="fixed flex items-center justify-center z-50 p-4 hidden pointer-events-none" id="restartGameEl">
             <div class="w-full h-full max-w-[720px] bg-[#1D1C2E] bg-opacity-95 rounded-[20px] border-4 border-[#DD4444] shadow-2xl flex flex-col items-center justify-center p-6 text-center pointer-events-auto">
                 <h2 class="text-3xl text-[#EFEFEF] font-bold mb-4">GAME OVER</h2>
-                <div class="space-y-2 mb-12">
+                <div class="space-y-2 mb-8">
                     <p class="text-xl text-[#EFEFEF]">Score: <span id="scoreEl">0</span></p>
                     <p class="text-xl text-[#EFEFEF]">Distance: <span id="metersEl">0</span>m</p>
+                    <p class="text-sm text-[#EFEFEF] opacity-75">High Score: <span id="highScoreEl">0</span></p>
+                    <p class="text-sm text-[#EFEFEF] opacity-75">Best Distance: <span id="bestMetersEl">0</span>m</p>
                 </div>
-                <button id="restartGameBtn" class="w-full max-w-[280px] py-4 bg-[#EFEFEF] text-[#1D1C2E] rounded-xl font-bold text-xl active:scale-95 transition-transform">PLAY AGAIN</button>
+                <div class="flex flex-col gap-3 w-full max-w-[280px]">
+                    <button id="restartGameBtn" class="w-full py-4 bg-[#EFEFEF] text-[#1D1C2E] rounded-xl font-bold text-xl active:scale-95 transition-transform">PLAY AGAIN</button>
+                    <button id="backToLobbyBtn" class="w-full py-3 bg-gray-700 text-white rounded-xl font-bold text-lg active:scale-95 transition-transform">BACK TO LOBBY</button>
+                </div>
             </div>
         </div>
         <canvas id="canvas" class="bg-[#44AD44] shadow-2xl"></canvas>

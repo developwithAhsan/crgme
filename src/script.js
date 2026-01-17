@@ -8,6 +8,9 @@ window.addEventListener("load", function () {
   const startGameBtn = document.getElementById("startGameBtn");
   const restartGameEl = document.getElementById("restartGameEl");
   const restartGameBtn = document.getElementById("restartGameBtn");
+  const backToLobbyBtn = document.getElementById("backToLobbyBtn");
+  const highScoreEl = document.getElementById("highScoreEl");
+  const bestMetersEl = document.getElementById("bestMetersEl");
 
   // Mobile 9:16 portrait optimization
   function resize() {
@@ -69,7 +72,8 @@ window.addEventListener("load", function () {
 
   let score = 0;
   let metersTraveled = 0;
-  let bestDistance = localStorage.getItem('highwayRacerBestDistance') || 0;
+  let bestDistance = parseInt(localStorage.getItem('highwayRacerBestDistance')) || 0;
+  let highScore = parseInt(localStorage.getItem('highwayRacerHighScore')) || 0;
   let selectedRoad = 'background';
   let drops = [];
   let explosions = [];
@@ -131,6 +135,11 @@ window.addEventListener("load", function () {
       restartGameBtn.addEventListener("click", () => {
         restartGameEl.style.display = "none";
         init();
+      });
+
+      backToLobbyBtn.addEventListener("click", () => {
+        restartGameEl.style.display = "none";
+        startGameEl.style.display = "flex";
       });
 
       // On-screen controls
@@ -612,9 +621,15 @@ window.addEventListener("load", function () {
         bestDistance = metersTraveled;
         localStorage.setItem('highwayRacerBestDistance', bestDistance);
       }
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highwayRacerHighScore', highScore);
+      }
       updateRoadButtons();
       scoreEl.innerText = score;
       metersEl.innerText = metersTraveled;
+      highScoreEl.innerText = highScore;
+      bestMetersEl.innerText = bestDistance;
       restartGameEl.style.display = "flex";
       document.getElementById('gameControls').style.display = 'none';
       return;
