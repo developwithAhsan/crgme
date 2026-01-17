@@ -466,7 +466,7 @@ window.addEventListener("load", function () {
       if (bestDistance >= distance) {
         btn.dataset.unlocked = "true";
         btn.classList.remove('bg-gray-900', 'text-gray-400', 'opacity-50');
-        btn.classList.add('bg-gray-700', 'text-white');
+        btn.classList.add('bg-gray-700', 'text-white', 'cursor-pointer');
         btn.innerText = road.charAt(0).toUpperCase() + road.slice(1);
         if (road === 'default') btn.innerText = 'Highway';
       }
